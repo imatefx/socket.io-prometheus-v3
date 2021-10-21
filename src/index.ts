@@ -1,6 +1,7 @@
 import { collectDefaultMetrics, register } from 'prom-client'
 import SocketIoCollector from './SocketIoCollector'
 import * as io from 'socket.io'
+import {hostname} from "os";
 
 interface PrometheusSocketIoConfig {
   io: io.Server
@@ -24,7 +25,10 @@ export class PrometheusSocketIo {
   }
 
   collectDefaultMetrics(): void {
-    collectDefaultMetrics()
+    collectDefaultMetrics({
+      labels: { SOCKET_SERVER_INSTANCE: hostname() },
+      prefix: "socket_server_"
+    })
   }
 
   collectSocketIoMetrics(): void {
